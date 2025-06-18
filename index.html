@@ -5,9 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KrishiConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
-</head>
 
+  <!-- Firebase SDKs -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, getDocs, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
+      authDomain: "krishiconnect-4dff6.firebaseapp.com",
+      projectId: "krishiconnect-4dff6",
+      storageBucket: "krishiconnect-4dff6.appspot.com",
+      messagingSenderId: "388114250683",
+      appId: "1:388114250683:web:489b7705982317a0ae629e",
+      measurementId: "G-QFEEZNQEF7"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.firebaseAuth = auth;
+    window.firebaseFns = { createUserWithEmailAndPassword, signInWithEmailAndPassword };
+    window.firebaseDB = db;
+    window.firebaseUtils = { collection, addDoc, getDocs, query, orderBy, serverTimestamp };
+  </script>
+</head>
 <body class="bg-gray-50 text-gray-800">
+
   <!-- Navbar -->
   <nav class="bg-green-700 text-white">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
@@ -20,14 +46,14 @@
     </div>
   </nav>
 
-  <!-- Hero -->
-  <header class="text-center py-16 bg-white shadow">
+  <!-- Hero Section -->
+  <header class="text-center py-16 px-6 bg-white shadow">
     <h2 class="text-4xl font-extrabold text-green-700">Welcome to KrishiConnect</h2>
     <p class="mt-4 text-lg text-gray-600">Connecting farmers with job seekers, experts, and equipment providers.</p>
     <a href="#register" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-800 transition">Get Started</a>
   </header>
 
-  <!-- Features -->
+  <!-- Features Section -->
   <section id="features" class="py-16 bg-gray-100">
     <div class="max-w-6xl mx-auto px-4">
       <h3 class="text-2xl font-bold mb-8 text-center">Key Features</h3>
@@ -48,28 +74,28 @@
     </div>
   </section>
 
-  <!-- Job Form -->
-  <section id="post-job" class="py-16 bg-white">
-    <div class="max-w-3xl mx-auto px-4">
-      <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Post a Job</h3>
-      <form id="jobForm" class="bg-gray-100 p-6 rounded-xl shadow space-y-4">
-        <input type="text" id="jobTitle" placeholder="Job Title" required class="w-full border px-4 py-2 rounded" />
-        <input type="text" id="jobLocation" placeholder="Location" required class="w-full border px-4 py-2 rounded" />
-        <textarea id="jobDetails" placeholder="Job Details" required class="w-full border px-4 py-2 rounded"></textarea>
-        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Post Job</button>
-      </form>
-    </div>
-  </section>
-
-  <!-- Job Listings -->
-  <section id="liveJobs" class="py-16 bg-green-50">
+  <!-- Live Jobs Section -->
+  <section id="liveJobs" class="py-16 bg-white">
     <div class="max-w-4xl mx-auto px-4">
-      <h3 class="text-2xl font-bold text-center mb-6">Live Jobs</h3>
+      <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Live Jobs</h3>
       <div id="jobList" class="grid gap-4"></div>
     </div>
   </section>
 
-  <!-- Register / Login -->
+  <!-- Job Application Section -->
+  <section id="apply" class="py-16 bg-green-50">
+    <div class="max-w-xl mx-auto px-4">
+      <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Apply as Freelancer</h3>
+      <form id="applyForm" class="bg-white p-6 rounded-xl shadow space-y-4">
+        <input type="text" id="applicantName" placeholder="Your Name" required class="w-full border px-4 py-2 rounded" />
+        <input type="email" id="applicantEmail" placeholder="Your Email" required class="w-full border px-4 py-2 rounded" />
+        <textarea id="applicationMessage" placeholder="Your Message" required class="w-full border px-4 py-2 rounded"></textarea>
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Submit Application</button>
+      </form>
+    </div>
+  </section>
+
+  <!-- Register/Login -->
   <section id="register" class="py-16 bg-green-50">
     <div class="max-w-md mx-auto px-4">
       <h3 class="text-2xl font-bold text-center mb-6">Register or Login</h3>
@@ -85,95 +111,80 @@
     </div>
   </section>
 
+  <!-- Footer -->
   <footer class="text-center py-6 text-sm text-gray-500">
     © 2025 KrishiConnect. All rights reserved.
   </footer>
 
-  <!-- Firebase SDK + App Logic -->
-  <script type="module">
-    // Import Firebase SDK modules
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+  <!-- Firebase Scripts -->
+  <script>
+    const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = window.firebaseFns;
+    const auth = window.firebaseAuth;
+    const db = window.firebaseDB;
+    const { collection, addDoc, getDocs, query, orderBy, serverTimestamp } = window.firebaseUtils;
 
-    // Firebase config
-    const firebaseConfig = {
-      apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
-      authDomain: "krishiconnect-4dff6.firebaseapp.com",
-      projectId: "krishiconnect-4dff6",
-      storageBucket: "krishiconnect-4dff6.appspot.com",
-      messagingSenderId: "388114250683",
-      appId: "1:388114250683:web:489b7705982317a0ae629e",
-      measurementId: "G-QFEEZNQEF7"
-    };
+    const authMsg = document.getElementById('authMessage');
 
-    // Init Firebase
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    // Register/Login
     window.signUp = async () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const msg = document.getElementById('authMessage');
       try {
         await createUserWithEmailAndPassword(auth, email, password);
-        msg.innerText = "✅ Signup successful!";
+        authMsg.innerText = '✅ Signup successful!';
       } catch (error) {
-        msg.innerText = error.message;
+        authMsg.innerText = error.message;
       }
     };
 
     window.logIn = async () => {
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
-      const msg = document.getElementById('authMessage');
       try {
         await signInWithEmailAndPassword(auth, email, password);
-        msg.innerText = "✅ Login successful!";
+        authMsg.innerText = '✅ Login successful!';
       } catch (error) {
-        msg.innerText = error.message;
+        authMsg.innerText = error.message;
       }
     };
 
-    // Post Job
-    const jobForm = document.getElementById('jobForm');
-    jobForm.addEventListener('submit', async (e) => {
+    document.getElementById('applyForm').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const title = document.getElementById('jobTitle').value;
-      const location = document.getElementById('jobLocation').value;
-      const details = document.getElementById('jobDetails').value;
+      const name = document.getElementById('applicantName').value;
+      const email = document.getElementById('applicantEmail').value;
+      const message = document.getElementById('applicationMessage').value;
 
       try {
-        await addDoc(collection(db, "jobs"), {
-          title,
-          location,
-          details,
+        await addDoc(collection(db, "applications"), {
+          name,
+          email,
+          message,
           timestamp: serverTimestamp()
         });
-        jobForm.reset();
-        alert("✅ Job posted!");
-      } catch (err) {
-        console.error("Error adding job: ", err);
+        alert("✅ Application submitted!");
+        document.getElementById('applyForm').reset();
+      } catch (error) {
+        alert("Error submitting application: " + error.message);
       }
     });
 
-    // Load Jobs
-    const jobList = document.getElementById('jobList');
-    const q = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
-    onSnapshot(q, (snapshot) => {
+    async function loadJobs() {
+      const jobList = document.getElementById('jobList');
       jobList.innerHTML = '';
-      snapshot.forEach(doc => {
+      const q = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
+      const querySnapshot = await getDocs(q);
+      querySnapshot.forEach((doc) => {
         const job = doc.data();
-        const div = document.createElement('div');
-        div.className = "bg-white rounded-xl p-4 shadow";
-        div.innerHTML = `<h4 class="text-lg font-bold text-green-700">${job.title}</h4>
-                         <p class="text-sm text-gray-600">📍 ${job.location}</p>
-                         <p class="mt-2 text-gray-700">${job.details}</p>`;
-        jobList.appendChild(div);
+        const jobCard = `
+          <div class="bg-white p-4 rounded-xl shadow mb-4">
+            <h4 class="text-lg font-semibold text-green-700">${job.title}</h4>
+            <p class="text-sm text-gray-600">${job.location}</p>
+            <p class="mt-2 text-gray-700">${job.details}</p>
+          </div>`;
+        jobList.innerHTML += jobCard;
       });
-    });
+    }
+
+    window.onload = loadJobs;
   </script>
 </body>
-</html>
+            </html>
