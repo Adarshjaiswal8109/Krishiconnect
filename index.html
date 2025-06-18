@@ -5,30 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KrishiConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Firebase SDKs -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-<script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";></script>
-  <script>
-    
-    const firebaseConfig = {
-      apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
-      authDomain: "krishiconnect-4dff6.firebaseapp.com",
-      projectId: "krishiconnect-4dff6",
-      storageBucket: "krishiconnect-4dff6.appspot.com",
-      messagingSenderId: "388114250683",
-      appId: "1:388114250683:web:489b7705982317a0ae629e",
-      measurementId: "G-QFEEZNQEF7"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-
-    window.firebaseAuth = auth;
-    window.firebaseFns = { createUserWithEmailAndPassword, signInWithEmailAndPassword };
-  </script>
 </head>
 
 <body class="bg-gray-50 text-gray-800">
@@ -44,224 +20,160 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
-  <header class="text-center py-16 px-6 bg-white shadow">
+  <!-- Hero -->
+  <header class="text-center py-16 bg-white shadow">
     <h2 class="text-4xl font-extrabold text-green-700">Welcome to KrishiConnect</h2>
     <p class="mt-4 text-lg text-gray-600">Connecting farmers with job seekers, experts, and equipment providers.</p>
     <a href="#register" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-800 transition">Get Started</a>
   </header>
-  <!-- Features Section -->
-<section id="features" class="py-16 bg-gray-100">
-  <div class="max-w-6xl mx-auto px-4">
-    <h3 class="text-2xl font-bold mb-8 text-center">Key Features</h3>
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <h4 class="text-lg font-semibold text-green-700">Hire Farm Workers</h4>
-        <p class="mt-2 text-gray-600">Find and hire skilled farm laborers for every agricultural need.</p>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <h4 class="text-lg font-semibold text-green-700">Rent Equipment</h4>
-        <p class="mt-2 text-gray-600">Browse and book farm equipment available on rent nearby.</p>
-      </div>
-      <div class="bg-white p-6 rounded-xl shadow-md">
-        <h4 class="text-lg font-semibold text-green-700">Freelancer Jobs</h4>
-        <p class="mt-2 text-gray-600">Post or apply for agri-consulting, training, testing and more.</p>
+
+  <!-- Features -->
+  <section id="features" class="py-16 bg-gray-100">
+    <div class="max-w-6xl mx-auto px-4">
+      <h3 class="text-2xl font-bold mb-8 text-center">Key Features</h3>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <h4 class="text-lg font-semibold text-green-700">Hire Farm Workers</h4>
+          <p class="mt-2 text-gray-600">Find and hire skilled farm laborers for every agricultural need.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <h4 class="text-lg font-semibold text-green-700">Rent Equipment</h4>
+          <p class="mt-2 text-gray-600">Browse and book farm equipment available on rent nearby.</p>
+        </div>
+        <div class="bg-white p-6 rounded-xl shadow-md">
+          <h4 class="text-lg font-semibold text-green-700">Freelancer Jobs</h4>
+          <p class="mt-2 text-gray-600">Post or apply for agri-consulting, training, testing and more.</p>
+        </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 
-<!-- Jobs Section -->
-<section id="jobs" class="py-16">
-  <div class="max-w-4xl mx-auto px-4 text-center">
-    <h3 class="text-2xl font-bold mb-6">Trending Jobs</h3>
-    <div class="bg-white p-4 rounded-xl shadow">
-      <p class="text-gray-600">💼 Coming soon: Live job board for agriculture jobs across India.</p>
+  <!-- Job Form -->
+  <section id="post-job" class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4">
+      <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Post a Job</h3>
+      <form id="jobForm" class="bg-gray-100 p-6 rounded-xl shadow space-y-4">
+        <input type="text" id="jobTitle" placeholder="Job Title" required class="w-full border px-4 py-2 rounded" />
+        <input type="text" id="jobLocation" placeholder="Location" required class="w-full border px-4 py-2 rounded" />
+        <textarea id="jobDetails" placeholder="Job Details" required class="w-full border px-4 py-2 rounded"></textarea>
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Post Job</button>
+      </form>
     </div>
-  </div>
-</section>
-<!-- Job Posting Section -->
-<section id="postJob" class="py-16 bg-white">
-  <div class="max-w-2xl mx-auto px-4">
-    <h3 class="text-2xl font-bold text-center mb-6">Post a New Job</h3>
-    <form id="jobForm" class="space-y-4 bg-gray-100 p-6 rounded-xl shadow">
-      <input type="text" id="jobTitle" placeholder="Job Title" required class="w-full border border-gray-300 px-4 py-2 rounded" />
-      <textarea id="jobDesc" placeholder="Job Description" required class="w-full border border-gray-300 px-4 py-2 rounded"></textarea>
-      <button type="submit" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Post Job</button>
-    </form>
-  </div>
-</section>
-  <!-- Job Posting Section -->
-<section id="post-job" class="py-16 bg-gray-100">
-  <div class="max-w-3xl mx-auto px-4">
-    <h3 class="text-2xl font-bold text-center mb-6 text-green-700">Post a Job</h3>
-    <form id="jobForm" class="bg-white p-6 rounded-xl shadow space-y-4">
-      <input type="text" id="jobTitle" placeholder="Job Title" required class="w-full border px-4 py-2 rounded" />
-      <input type="text" id="jobLocation" placeholder="Location" required class="w-full border px-4 py-2 rounded" />
-      <textarea id="jobDetails" placeholder="Job Details" required class="w-full border px-4 py-2 rounded"></textarea>
-      <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700 transition">Post Job</button>
-    </form>
-  </div>
-</section>
+  </section>
 
-<!-- Job Listings Display Section -->
-<section id="live-jobs" class="py-16 bg-white">
-  <div class="max-w-4xl mx-auto px-4">
-    <h3 class="text-2xl font-bold mb-6 text-center text-green-700">Live Jobs</h3>
-    <div id="jobList"></div>
-  </div>
-</section>
+  <!-- Job Listings -->
+  <section id="liveJobs" class="py-16 bg-green-50">
+    <div class="max-w-4xl mx-auto px-4">
+      <h3 class="text-2xl font-bold text-center mb-6">Live Jobs</h3>
+      <div id="jobList" class="grid gap-4"></div>
+    </div>
+  </section>
 
-<!-- Live Job Listings Section -->
-<section id="liveJobs" class="py-16 bg-green-50">
-  <div class="max-w-4xl mx-auto px-4">
-    <h3 class="text-2xl font-bold text-center mb-6">Live Jobs</h3>
-    <div id="jobList" class="grid gap-4"></div>
-  </div>
-</section>
-<!-- Register / Login Section -->
-<section id="register" class="py-16 bg-green-50">
-  <div class="max-w-md mx-auto px-4">
-    <h3 class="text-2xl font-bold text-center mb-6">Register or Login</h3>
-    <form id="authForm" class="space-y-4 bg-white p-6 rounded-xl shadow">
-      <input type="email" id="email" placeholder="Email" class="w-full border px-4 py-2 rounded" required />
-      <input type="password" id="password" placeholder="Password" class="w-full border px-4 py-2 rounded" required />
-      <div class="flex justify-between">
-        <button type="button" onclick="signUp()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Sign Up</button>
-        <button type="button" onclick="logIn()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
-      </div>
-      <p id="authMessage" class="text-sm text-red-600 text-center"></p>
-    </form>
-  </div>
-</section>
+  <!-- Register / Login -->
+  <section id="register" class="py-16 bg-green-50">
+    <div class="max-w-md mx-auto px-4">
+      <h3 class="text-2xl font-bold text-center mb-6">Register or Login</h3>
+      <form id="authForm" class="space-y-4 bg-white p-6 rounded-xl shadow">
+        <input type="email" id="email" placeholder="Email" class="w-full border px-4 py-2 rounded" required />
+        <input type="password" id="password" placeholder="Password" class="w-full border px-4 py-2 rounded" required />
+        <div class="flex justify-between">
+          <button type="button" onclick="signUp()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Sign Up</button>
+          <button type="button" onclick="logIn()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
+        </div>
+        <p id="authMessage" class="text-sm text-red-600 text-center"></p>
+      </form>
+    </div>
+  </section>
 
-<!-- Footer -->
-<footer class="text-center py-6 text-sm text-gray-500">
-  © 2025 KrishiConnect. All rights reserved.
-</footer>
+  <footer class="text-center py-6 text-sm text-gray-500">
+    © 2025 KrishiConnect. All rights reserved.
+  </footer>
 
-<!-- Auth Script -->
-<script type="module">
-  const emailField = document.getElementById('email');
-  const passwordField = document.getElementById('password');
-  const authMsg = document.getElementById('authMessage');
+  <!-- Firebase SDK + App Logic -->
+  <script type="module">
+    // Import Firebase SDK modules
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { getFirestore, collection, addDoc, onSnapshot, query, orderBy, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-  const auth = window.firebaseAuth;
-  const { createUserWithEmailAndPassword, signInWithEmailAndPassword } = window.firebaseFns;
+    // Firebase config
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
+      authDomain: "krishiconnect-4dff6.firebaseapp.com",
+      projectId: "krishiconnect-4dff6",
+      storageBucket: "krishiconnect-4dff6.appspot.com",
+      messagingSenderId: "388114250683",
+      appId: "1:388114250683:web:489b7705982317a0ae629e",
+      measurementId: "G-QFEEZNQEF7"
+    };
 
-  window.signUp = async () => {
-    try {
-      await createUserWithEmailAndPassword(auth, emailField.value, passwordField.value);
-      authMsg.innerText = '✅ Signup successful!';
-    } catch (error) {
-      authMsg.innerText = error.message;
-    }
-  };
+    // Init Firebase
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
 
-  window.logIn = async () => {
-    try {
-      await signInWithEmailAndPassword(auth, emailField.value, passwordField.value);
-      authMsg.innerText = '✅ Login successful!';
-    } catch (error) {
-      authMsg.innerText = error.message;
-    }
-  };
-</script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js"></script>
-<script>
-  const database = firebase.database();
+    // Register/Login
+    window.signUp = async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('authMessage');
+      try {
+        await createUserWithEmailAndPassword(auth, email, password);
+        msg.innerText = "✅ Signup successful!";
+      } catch (error) {
+        msg.innerText = error.message;
+      }
+    };
 
-  document.getElementById('jobForm').addEventListener('submit', function(e) {
-    e.preventDefault();
+    window.logIn = async () => {
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const msg = document.getElementById('authMessage');
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+        msg.innerText = "✅ Login successful!";
+      } catch (error) {
+        msg.innerText = error.message;
+      }
+    };
 
-    const title = document.getElementById('jobTitle').value;
-    const location = document.getElementById('jobLocation').value;
-    const details = document.getElementById('jobDetails').value;
+    // Post Job
+    const jobForm = document.getElementById('jobForm');
+    jobForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const title = document.getElementById('jobTitle').value;
+      const location = document.getElementById('jobLocation').value;
+      const details = document.getElementById('jobDetails').value;
 
-    const newJobRef = database.ref('jobs').push();
-    newJobRef.set({
-      title: title,
-      location: location,
-      details: details,
-      timestamp: Date.now()
-    }).then(() => {
-      alert('Job posted successfully!');
-      document.getElementById('jobForm').reset();
-      loadJobs(); // Refresh jobs
-    }).catch(error => {
-      alert('Error posting job: ' + error.message);
+      try {
+        await addDoc(collection(db, "jobs"), {
+          title,
+          location,
+          details,
+          timestamp: serverTimestamp()
+        });
+        jobForm.reset();
+        alert("✅ Job posted!");
+      } catch (err) {
+        console.error("Error adding job: ", err);
+      }
     });
-  });
 
-  function loadJobs() {
+    // Load Jobs
     const jobList = document.getElementById('jobList');
-    jobList.innerHTML = '';
-
-    database.ref('jobs').once('value', function(snapshot) {
-      snapshot.forEach(function(childSnapshot) {
-        const job = childSnapshot.val();
+    const q = query(collection(db, "jobs"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+      jobList.innerHTML = '';
+      snapshot.forEach(doc => {
+        const job = doc.data();
         const div = document.createElement('div');
-        div.className = 'bg-white p-4 rounded shadow mb-4';
-        div.innerHTML = `<h4 class="text-lg font-semibold">${job.title}</h4>
+        div.className = "bg-white rounded-xl p-4 shadow";
+        div.innerHTML = `<h4 class="text-lg font-bold text-green-700">${job.title}</h4>
                          <p class="text-sm text-gray-600">📍 ${job.location}</p>
-                         <p class="mt-2">${job.details}</p>`;
+                         <p class="mt-2 text-gray-700">${job.details}</p>`;
         jobList.appendChild(div);
       });
     });
-  }
-
-  // Load jobs on page load
-  window.onload = loadJobs;
-</script>
-  <script>
-  // Reference to Firestore
-  const db = firebase.firestore();
-
-  // Handle job form submission
-  document.getElementById('jobForm').addEventListener('submit', function (e) {
-    e.preventDefault();
-
-    const title = document.getElementById('jobTitle').value;
-    const location = document.getElementById('jobLocation').value;
-    const details = document.getElementById('jobDetails').value;
-
-    db.collection("jobs").add({
-      title: title,
-      location: location,
-      details: details,
-      timestamp: firebase.firestore.FieldValue.serverTimestamp()
-    })
-    .then(() => {
-      alert("✅ Job Posted Successfully!");
-      document.getElementById('jobForm').reset();
-      loadJobs(); // Refresh job list
-    })
-    .catch(error => {
-      console.error("Error posting job: ", error);
-    });
-  });
-
-  // Function to load and display jobs
-  function loadJobs() {
-    db.collection("jobs").orderBy("timestamp", "desc").onSnapshot((snapshot) => {
-      const jobList = document.getElementById('jobList');
-      jobList.innerHTML = '';
-      snapshot.forEach((doc) => {
-        const job = doc.data();
-        const jobCard = `
-          <div class="bg-gray-100 rounded-xl shadow p-4 mb-4">
-            <h4 class="text-lg font-semibold text-green-700">${job.title}</h4>
-            <p class="text-sm text-gray-600">${job.location}</p>
-            <p class="mt-2 text-gray-700">${job.details}</p>
-          </div>
-        `;
-        jobList.innerHTML += jobCard;
-      });
-    });
-  }
-
-  // Load jobs on page load
-  window.onload = loadJobs;
   </script>
 </body>
 </html>
