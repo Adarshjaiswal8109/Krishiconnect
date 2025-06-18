@@ -4,133 +4,80 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>KrishiConnect</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Firebase SDKs -->
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
     import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";const firebaseConfig = {
-  apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
-  authDomain: "krishiconnect-4dff6.firebaseapp.com",
-  projectId: "krishiconnect-4dff6",
-  storageBucket: "krishiconnect-4dff6.appspot.com",
-  messagingSenderId: "388114250683",
-  appId: "1:388114250683:web:489b7705982317a0ae629e",
-  measurementId: "G-QFEEZNQEF7"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
-
-window.signUp = async function () {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    document.getElementById("authMessage").innerText = "Sign up successful!";
-  } catch (error) {
-    document.getElementById("authMessage").innerText = error.message;
-  }
-}
-
-window.logIn = async function () {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    document.getElementById("authMessage").innerText = "Login successful!";
-  } catch (error) {
-    document.getElementById("authMessage").innerText = error.message;
-  }
-}
-
-window.postJob = async function () {
-  const title = document.getElementById("jobTitle").value;
-  const location = document.getElementById("jobLocation").value;
-  const desc = document.getElementById("jobDescription").value;
-  try {
-    await addDoc(collection(db, "jobs"), { title, location, desc });
-    alert("Job posted successfully!");
-  } catch (e) {
-    alert("Failed to post job");
-  }
-}
-
-window.searchJobs = async function () {
-  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-  const q = query(collection(db, "jobs"));
-  const querySnapshot = await getDocs(q);
-  let results = "";
-  querySnapshot.forEach((doc) => {
-    const job = doc.data();
-    if (job.title.toLowerCase().includes(searchTerm) || job.location.toLowerCase().includes(searchTerm)) {
-      results += `<div class='p-4 bg-white rounded shadow mb-4'><h4 class='text-lg font-semibold'>${job.title}</h4><p>${job.location}</p><p>${job.desc}</p></div>`;
-    }
-  });
-  document.getElementById("searchResults").innerHTML = results || "<p>No jobs found.</p>";
-}
+  </script>
+  <script type="module" src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js"></script>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
+      authDomain: "krishiconnect-4dff6.firebaseapp.com",
+      projectId: "krishiconnect-4dff6",
+      storageBucket: "krishiconnect-4dff6.appspot.com",
+      messagingSenderId: "388114250683",
+      appId: "1:388114250683:web:489b7705982317a0ae629e",
+      measurementId: "G-QFEEZNQEF7"
+    };const app = firebase.initializeApp(firebaseConfig);
+const auth = firebase.auth();
+window.firebaseAuth = auth;
+window.firebaseFns = { createUserWithEmailAndPassword, signInWithEmailAndPassword };
 
   </script>
 </head>
 <body class="bg-gray-50 text-gray-800">
+  <!-- Navbar -->
   <nav class="bg-green-700 text-white">
     <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
       <h1 class="text-xl font-bold">🌾 KrishiConnect</h1>
       <div class="space-x-4">
         <a href="#features" class="hover:underline">Features</a>
         <a href="#jobs" class="hover:underline">Jobs</a>
-        <a href="#postJob" class="hover:underline">Post Job</a>
         <a href="#register" class="hover:underline">Register</a>
-        <a href="#about" class="hover:underline">About</a>
+        <a href="#about" class="hover:underline">About Us</a>
         <a href="#contact" class="hover:underline">Contact</a>
       </div>
     </div>
-  </nav>  <header class="text-center py-16 px-6 bg-white shadow">
-    <img src="https://images.unsplash.com/photo-1598207955304-d72a4b68f3d3" alt="Farm Banner" class="w-full max-h-96 object-cover rounded-xl mb-6">
+  </nav>  <!-- Hero Section -->  <header class="text-center py-16 px-6 bg-white shadow">
+    <img src="https://images.unsplash.com/photo-1598207955304-d72a4b68f3d3?auto=format&fit=crop&w=800&q=80" alt="Farm Banner" class="w-full max-h-96 object-cover rounded-xl mb-6">
     <h2 class="text-4xl font-extrabold text-green-700">Welcome to KrishiConnect</h2>
     <p class="mt-4 text-lg text-gray-600">Connecting farmers with job seekers, experts, and equipment providers.</p>
     <a href="#register" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-800 transition">Get Started</a>
-  </header>  <section id="features" class="py-16 bg-gray-100">
+  </header>  <!-- Features Section -->  <section id="features" class="py-16 bg-gray-100">
     <div class="max-w-6xl mx-auto px-4">
       <h3 class="text-2xl font-bold mb-8 text-center">Key Features</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         <div class="bg-white p-6 rounded-xl shadow-md">
-          <img src="https://images.unsplash.com/photo-1621605812480-bb89ffb58d47" alt="Farm Workers" class="w-full h-40 object-cover rounded mb-4">
+          <img src="https://images.unsplash.com/photo-1621605812480-bb89ffb58d47?auto=format&fit=crop&w=800&q=80" alt="Farm Workers" class="w-full h-40 object-cover rounded mb-4">
           <h4 class="text-lg font-semibold text-green-700">Hire Farm Workers</h4>
           <p class="mt-2 text-gray-600">Find and hire skilled farm laborers for every agricultural need.</p>
         </div>
         <div class="bg-white p-6 rounded-xl shadow-md">
-          <img src="https://images.unsplash.com/photo-1584448089583-66cfa60bfc4b" alt="Farm Equipment" class="w-full h-40 object-cover rounded mb-4">
+          <img src="https://images.unsplash.com/photo-1584448089583-66cfa60bfc4b?auto=format&fit=crop&w=800&q=80" alt="Farm Equipment" class="w-full h-40 object-cover rounded mb-4">
           <h4 class="text-lg font-semibold text-green-700">Rent Equipment</h4>
           <p class="mt-2 text-gray-600">Browse and book farm equipment available on rent nearby.</p>
         </div>
         <div class="bg-white p-6 rounded-xl shadow-md">
-          <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238" alt="Freelance Jobs" class="w-full h-40 object-cover rounded mb-4">
+          <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238?auto=format&fit=crop&w=800&q=80" alt="Freelance Jobs" class="w-full h-40 object-cover rounded mb-4">
           <h4 class="text-lg font-semibold text-green-700">Freelancer Jobs</h4>
           <p class="mt-2 text-gray-600">Post or apply for agri-consulting, training, testing and more.</p>
         </div>
       </div>
     </div>
-  </section>  <section id="jobs" class="py-16">
+  </section>  <!-- Jobs Section -->  <section id="jobs" class="py-16">
     <div class="max-w-4xl mx-auto px-4 text-center">
-      <h3 class="text-2xl font-bold mb-6">Search Jobs</h3>
-      <input id="searchInput" type="text" placeholder="Search by title or location" class="border px-4 py-2 rounded w-full mb-4"/>
-      <button onclick="searchJobs()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Search</button>
-      <div id="searchResults" class="mt-6"></div>
+      <h3 class="text-2xl font-bold mb-6">Trending Jobs</h3>
+      <img src="https://images.unsplash.com/photo-1524223439605-1c5fef9e0c87?auto=format&fit=crop&w=800&q=80" alt="Trending Jobs" class="w-full h-64 object-cover rounded mb-4">
+      <input type="text" placeholder="Search for jobs..." class="w-full px-4 py-2 border rounded mb-4">
+      <div class="bg-white p-4 rounded-xl shadow">
+        <p class="text-gray-600">💼 Coming soon: Live job board for agriculture jobs across India.</p>
+      </div>
     </div>
-  </section>  <section id="postJob" class="py-16 bg-gray-100">
-    <div class="max-w-md mx-auto px-4">
-      <h3 class="text-2xl font-bold text-center mb-6">Post a Job</h3>
-      <form class="space-y-4 bg-white p-6 rounded-xl shadow">
-        <input id="jobTitle" type="text" placeholder="Job Title" class="w-full border px-4 py-2 rounded" required/>
-        <input id="jobLocation" type="text" placeholder="Location" class="w-full border px-4 py-2 rounded" required/>
-        <textarea id="jobDescription" placeholder="Description" class="w-full border px-4 py-2 rounded" required></textarea>
-        <button type="button" onclick="postJob()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Post Job</button>
-      </form>
-    </div>
-  </section>  <section id="register" class="py-16 bg-green-50">
+  </section>  <!-- Register / Login Section -->  <section id="register" class="py-16 bg-green-50">
     <div class="max-w-md mx-auto px-4">
       <h3 class="text-2xl font-bold text-center mb-6">Register or Login</h3>
-      <img src="https://images.unsplash.com/photo-1531498860502-7c29c67b66f7" alt="Login" class="w-full h-48 object-cover rounded mb-4">
+      <img src="https://images.unsplash.com/photo-1531498860502-7c29c67b66f7?auto=format&fit=crop&w=800&q=80" alt="Login" class="w-full h-48 object-cover rounded mb-4">
       <form id="authForm" class="space-y-4 bg-white p-6 rounded-xl shadow">
         <input type="email" id="email" placeholder="Email" class="w-full border px-4 py-2 rounded" required />
         <input type="password" id="password" placeholder="Password" class="w-full border px-4 py-2 rounded" required />
@@ -141,18 +88,23 @@ window.searchJobs = async function () {
         <p id="authMessage" class="text-sm text-red-600 text-center"></p>
       </form>
     </div>
-  </section>  <section id="about" class="py-16">
-    <div class="max-w-4xl mx-auto px-4 text-center">
+  </section>  <!-- About Us -->  <section id="about" class="py-16 bg-white">
+    <div class="max-w-3xl mx-auto px-4 text-center">
       <h3 class="text-2xl font-bold mb-4">About Us</h3>
-      <p class="text-gray-600">KrishiConnect aims to bridge the gap between farmers and skilled manpower, equipment, and agricultural freelancers across India. We believe in building a smart agricultural workforce for tomorrow.</p>
+      <p class="text-gray-600">KrishiConnect is dedicated to bridging the gap between rural farmers and modern agricultural resources, connecting labor, jobs, and tools with those who need them most.</p>
     </div>
-  </section>  <section id="contact" class="py-16 bg-gray-100">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h3 class="text-2xl font-bold mb-4">Contact Us</h3>
-      <p class="text-gray-600 mb-4">Have questions or feedback? Reach out to us at <a href="mailto:support@krishiconnect.in" class="text-green-600">support@krishiconnect.in</a></p>
+  </section>  <!-- Contact Section -->  <section id="contact" class="py-16 bg-gray-100">
+    <div class="max-w-3xl mx-auto px-4">
+      <h3 class="text-2xl font-bold mb-6 text-center">Contact Us</h3>
+      <form class="bg-white p-6 rounded-xl shadow space-y-4">
+        <input type="text" placeholder="Your Name" class="w-full border px-4 py-2 rounded" required />
+        <input type="email" placeholder="Your Email" class="w-full border px-4 py-2 rounded" required />
+        <textarea placeholder="Your Message" class="w-full border px-4 py-2 rounded" rows="4" required></textarea>
+        <button type="submit" class="bg-green-600 text-white px-6 py-2 rounded hover:bg-green-700">Send Message</button>
+      </form>
     </div>
-  </section>  <footer class="text-center py-6 text-sm text-gray-500">
-    <img src="https://images.unsplash.com/photo-1560787313-5dff3307e257" alt="Footer" class="w-full max-h-64 object-cover rounded mb-4">
+  </section>  <!-- Footer -->  <footer class="text-center py-6 text-sm text-gray-500">
+    <img src="https://images.unsplash.com/photo-1560787313-5dff3307e257?auto=format&fit=crop&w=800&q=80" alt="Footer" class="w-full max-h-64 object-cover rounded mb-4">
     © 2025 KrishiConnect. All rights reserved.
   </footer>
 </body>
