@@ -1,175 +1,387 @@
-<!DOCTYPE html><html lang="en">
+<!DOCTYPE html>
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>KrishiConnect</title>
+  <title>KrishiConnect – Connecting Farmers with Opportunity</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Noto+Sans:wght@400;500&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { getFirestore, collection, addDoc, getDocs, query, where } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";const firebaseConfig = {
-  apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
-  authDomain: "krishiconnect-4dff6.firebaseapp.com",
-  projectId: "krishiconnect-4dff6",
-  storageBucket: "krishiconnect-4dff6.appspot.com",
-  messagingSenderId: "388114250683",
-  appId: "1:388114250683:web:489b7705982317a0ae629e",
-  measurementId: "G-QFEEZNQEF7"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth();
-const db = getFirestore();
-
-window.signUp = async function () {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  try {
-    await createUserWithEmailAndPassword(auth, email, password);
-    document.getElementById("authMessage").innerText = "Sign up successful!";
-  } catch (error) {
-    document.getElementById("authMessage").innerText = error.message;
-  }
-}
-
-window.logIn = async function () {
-  const email = document.getElementById("email").value;
-  const password = document.getElementById("password").value;
-  try {
-    await signInWithEmailAndPassword(auth, email, password);
-    document.getElementById("authMessage").innerText = "Login successful!";
-  } catch (error) {
-    document.getElementById("authMessage").innerText = error.message;
-  }
-}
-
-window.postJob = async function () {
-  const title = document.getElementById("jobTitle").value;
-  const location = document.getElementById("jobLocation").value;
-  const desc = document.getElementById("jobDescription").value;
-  try {
-    await addDoc(collection(db, "jobs"), { title, location, desc });
-    alert("Job posted successfully!");
-  } catch (e) {
-    alert("Failed to post job");
-  }
-}
-
-window.searchJobs = async function () {
-  const searchTerm = document.getElementById("searchInput").value.toLowerCase();
-  const q = query(collection(db, "jobs"));
-  const querySnapshot = await getDocs(q);
-  let results = "";
-  querySnapshot.forEach((doc) => {
-    const job = doc.data();
-    if (job.title.toLowerCase().includes(searchTerm) || job.location.toLowerCase().includes(searchTerm)) {
-      results += `<div class='p-4 bg-white rounded shadow mb-4'><h4 class='text-lg font-semibold'>${job.title}</h4><p>${job.location}</p><p>${job.desc}</p></div>`;
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            soil: '#4a2c0a',
+            leaf: '#2d6a2d',
+            'leaf-light': '#3d8b3d',
+            'leaf-dark': '#1a4a1a',
+            harvest: '#e8a020',
+            sky: '#e8f4f0',
+            cream: '#faf7f2',
+          },
+          fontFamily: {
+            heading: ['Poppins', 'sans-serif'],
+            body: ['Noto Sans', 'sans-serif'],
+          }
+        }
+      }
     }
-  });
-  document.getElementById("searchResults").innerHTML = results || "<p>No jobs found.</p>";
-}
-
   </script>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: 'Noto Sans', sans-serif; background: #faf7f2; }
+    h1, h2, h3, h4, h5 { font-family: 'Poppins', sans-serif; }
+
+    /* Navbar */
+    .navbar { background: #1a4a1a; position: sticky; top: 0; z-index: 100; box-shadow: 0 2px 12px rgba(0,0,0,0.18); }
+    .nav-logo { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: 1.3rem; letter-spacing: -0.5px; color: #fff; display: flex; align-items: center; gap: 8px; }
+    .nav-links a { color: #d4e8d4; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; padding: 4px 0; border-bottom: 2px solid transparent; }
+    .nav-links a:hover { color: #fff; border-bottom-color: #e8a020; }
+    .hamburger { display: none; flex-direction: column; gap: 5px; cursor: pointer; }
+    .hamburger span { display: block; width: 24px; height: 2px; background: #fff; transition: 0.3s; }
+    #mobile-menu { display: none; flex-direction: column; gap: 12px; padding: 16px 20px; background: #1a4a1a; border-top: 1px solid #2d6a2d; }
+    #mobile-menu a { color: #d4e8d4; font-weight: 500; font-size: 1rem; padding: 6px 0; border-bottom: 1px solid #2d6a2d; }
+    #mobile-menu.open { display: flex; }
+
+    /* Hero */
+    .hero { position: relative; overflow: hidden; background: #1a4a1a; min-height: 560px; display: flex; align-items: center; }
+    .hero video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.35; }
+    .hero-content { position: relative; z-index: 2; }
+    .hero-badge { display: inline-block; background: #e8a020; color: #fff; font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 0.75rem; letter-spacing: 2px; text-transform: uppercase; padding: 5px 14px; border-radius: 20px; margin-bottom: 18px; }
+    .hero-title { font-family: 'Poppins', sans-serif; font-weight: 800; font-size: clamp(2rem, 5vw, 3.5rem); color: #fff; line-height: 1.1; margin-bottom: 18px; }
+    .hero-title span { color: #e8a020; }
+    .hero-sub { color: #b8d8b8; font-size: 1.1rem; max-width: 540px; line-height: 1.7; margin-bottom: 32px; }
+    .btn-primary { background: #e8a020; color: #fff; font-family: 'Poppins', sans-serif; font-weight: 700; padding: 14px 32px; border-radius: 8px; font-size: 1rem; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; display: inline-block; text-decoration: none; }
+    .btn-primary:hover { background: #c88010; transform: translateY(-2px); }
+    .btn-secondary { background: transparent; color: #fff; font-family: 'Poppins', sans-serif; font-weight: 600; padding: 14px 32px; border-radius: 8px; font-size: 1rem; border: 2px solid rgba(255,255,255,0.4); cursor: pointer; transition: border-color 0.2s; display: inline-block; text-decoration: none; }
+    .btn-secondary:hover { border-color: #fff; }
+
+    /* Stats bar */
+    .stats-bar { background: #2d6a2d; color: #fff; }
+    .stat-item { text-align: center; padding: 20px; }
+    .stat-num { font-family: 'Poppins', sans-serif; font-size: 1.8rem; font-weight: 800; color: #e8a020; }
+    .stat-label { font-size: 0.8rem; color: #b8d8b8; margin-top: 2px; }
+
+    /* Section styles */
+    .section-label { font-size: 0.75rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e8a020; margin-bottom: 10px; }
+    .section-title { font-family: 'Poppins', sans-serif; font-size: clamp(1.6rem, 3vw, 2.2rem); font-weight: 800; color: #1a4a1a; margin-bottom: 12px; }
+    .section-sub { color: #666; font-size: 1rem; line-height: 1.7; max-width: 560px; }
+
+    /* Feature cards */
+    .feature-card { background: #fff; border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.07); transition: transform 0.2s, box-shadow 0.2s; }
+    .feature-card:hover { transform: translateY(-6px); box-shadow: 0 12px 32px rgba(0,0,0,0.12); }
+    .feature-card img { width: 100%; height: 180px; object-fit: cover; }
+    .feature-icon { width: 44px; height: 44px; background: #e8f4f0; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; margin-bottom: 12px; }
+
+    /* Form styles */
+    .form-card { background: #fff; border-radius: 16px; padding: 32px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .form-input { width: 100%; border: 1.5px solid #e0e0e0; border-radius: 8px; padding: 12px 16px; font-family: 'Noto Sans', sans-serif; font-size: 0.95rem; transition: border-color 0.2s; outline: none; background: #faf7f2; }
+    .form-input:focus { border-color: #2d6a2d; background: #fff; }
+    .form-label { font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.85rem; color: #333; margin-bottom: 6px; display: block; }
+
+    /* Job card */
+    .job-card { background: #fff; border-radius: 12px; padding: 20px; border-left: 4px solid #2d6a2d; box-shadow: 0 2px 12px rgba(0,0,0,0.06); margin-bottom: 16px; transition: box-shadow 0.2s; }
+    .job-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+
+    /* Toast */
+    #toast { position: fixed; bottom: 24px; right: 24px; z-index: 9999; transform: translateY(80px); opacity: 0; transition: all 0.3s ease; }
+    #toast.show { transform: translateY(0); opacity: 1; }
+    .toast-inner { background: #1a4a1a; color: #fff; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; padding: 14px 24px; border-radius: 10px; display: flex; align-items: center; gap: 10px; box-shadow: 0 8px 24px rgba(0,0,0,0.2); }
+
+    /* Auth tabs */
+    .auth-tab { cursor: pointer; padding: 10px 24px; border-radius: 8px; font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 0.9rem; transition: all 0.2s; color: #666; background: transparent; border: none; }
+    .auth-tab.active { background: #2d6a2d; color: #fff; }
+
+    /* Footer */
+    .footer { background: #0f2e0f; color: #b8d8b8; }
+    .footer a { color: #b8d8b8; transition: color 0.2s; }
+    .footer a:hover { color: #e8a020; }
+
+    /* About */
+    .about-img { width: 130px; height: 130px; border-radius: 50%; border: 4px solid #e8a020; object-fit: cover; box-shadow: 0 6px 24px rgba(0,0,0,0.15); }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hamburger { display: flex; }
+      .nav-links { display: none; }
+      .hero { min-height: 480px; }
+    }
+
+    /* Scroll reveal */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.6s ease, transform 0.6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+  </style>
 </head>
-<body class="bg-gray-50 text-gray-800">
-  <nav class="bg-green-700 text-white">
-    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold">🌾KrishiConnect</h1>
-      <div class="space-x-4">
-        <a href="#features" class="hover:underline">Features</a>
-        <a href="#jobs" class="hover:underline">Jobs</a>
-        <a href="#postJob" class="hover:underline">Post Job</a>
-        <a href="#register" class="hover:underline">Register</a>
-        <a href="#about" class="hover:underline">About</a>
-        <a href="#contact" class="hover:underline">Contact</a>
-      </div>
-    </div>
-  </nav>  <header class="text-center py-16 px-6 bg-white shadow">
-   <video autoplay muted loop playsinline class="w-full max-h-96 object-cover rounded-xl mb-6">
-  <source src="https://Adarshjaiswal8109.github.io/krishiconnect/assets/Farm_banner.mp4" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
-    <h2 class="text-4xl font-extrabold text-green-700">Welcome to KrishiConnect</h2>
-    <p class="mt-4 text-lg text-gray-600">Connecting farmers with job seekers, experts, and equipment providers.</p>
-    <a href="#register" class="mt-6 inline-block bg-green-600 text-white px-6 py-2 rounded-full hover:bg-green-800 transition">Get Started</a>
-  </header>  <section id="features" class="py-16 bg-gray-100">
-    <div class="max-w-6xl mx-auto px-4">
-      <h3 class="text-2xl font-bold mb-8 text-center">Key Features</h3>
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <div class="bg-white p-6 rounded-xl shadow-md">
-          <img src="https://images.unsplash.com/photo-1621605812480-bb89ffb58d47" alt="Farm Workers" class="w-full h-40 object-cover rounded mb-4">
-          <h4 class="text-lg font-semibold text-green-700">Hire Farm Workers</h4>
-          <p class="mt-2 text-gray-600">Find and hire skilled farm laborers for every agricultural need.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md">
-          <img src="https://images.unsplash.com/photo-1584448089583-66cfa60bfc4b" alt="Farm Equipment" class="w-full h-40 object-cover rounded mb-4">
-          <h4 class="text-lg font-semibold text-green-700">Rent Equipment</h4>
-          <p class="mt-2 text-gray-600">Browse and book farm equipment available on rent nearby.</p>
-        </div>
-        <div class="bg-white p-6 rounded-xl shadow-md">
-          <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238" alt="Freelance Jobs" class="w-full h-40 object-cover rounded mb-4">
-          <h4 class="text-lg font-semibold text-green-700">Freelancer Jobs</h4>
-          <p class="mt-2 text-gray-600">Post or apply for agri-consulting, training, testing and more.</p>
-        </div>
-      </div>
-    </div>
-  </section>  <section id="jobs" class="py-16">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h3 class="text-2xl font-bold mb-6">Search Jobs</h3>
-      <input id="searchInput" type="text" placeholder="Search by title or location" class="border px-4 py-2 rounded w-full mb-4"/>
-      <button onclick="searchJobs()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Search</button>
-      <div id="searchResults" class="mt-6"></div>
-    </div>
-  </section>  <section id="postJob" class="py-16 bg-gray-100">
-    <div class="max-w-md mx-auto px-4">
-      <h3 class="text-2xl font-bold text-center mb-6">Post a Job</h3>
-      <form class="space-y-4 bg-white p-6 rounded-xl shadow">
-        <input id="jobTitle" type="text" placeholder="Job Title" class="w-full border px-4 py-2 rounded" required/>
-        <input id="jobLocation" type="text" placeholder="Location" class="w-full border px-4 py-2 rounded" required/>
-        <textarea id="jobDescription" placeholder="Description" class="w-full border px-4 py-2 rounded" required></textarea>
-        <button type="button" onclick="postJob()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Post Job</button>
-      </form>
-    </div>
-  </section>  <section id="register" class="py-16 bg-green-50">
-    <div class="max-w-md mx-auto px-4">
-      <h3 class="text-2xl font-bold text-center mb-6">Register or Login</h3>
-      <img src="https://images.unsplash.com/photo-1531498860502-7c29c67b66f7" alt="Login" class="w-full h-48 object-cover rounded mb-4">
-      <form id="authForm" class="space-y-4 bg-white p-6 rounded-xl shadow">
-        <input type="email" id="email" placeholder="Email" class="w-full border px-4 py-2 rounded" required />
-        <input type="password" id="password" placeholder="Password" class="w-full border px-4 py-2 rounded" required />
-        <div class="flex justify-between">
-          <button type="button" onclick="signUp()" class="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">Sign Up</button>
-          <button type="button" onclick="logIn()" class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Login</button>
-        </div>
-        <p id="authMessage" class="text-sm text-red-600 text-center"></p>
-      </form>
-    </div>
-  </section>  <section id="about" class="py-16 bg-white">
-  <div class="max-w-4xl mx-auto px-4 text-center">
-    <h3 class="text-3xl font-bold mb-6 text-green-700">About Us</h3>
+<body>
 
-    <img 
-      src="https://adarshjaiswal8109.github.io/krishiconnect/adarsh.jpeg" 
-      alt="Adarsh Jaiswal" 
-      class="mx-auto w-32 h-32 rounded-full border-4 border-green-500 shadow-lg mb-4"
+<!-- NAVBAR -->
+<nav class="navbar">
+  <div class="max-w-7xl mx-auto px-5 py-4 flex justify-between items-center">
+    <div class="nav-logo">
+      <span style="font-size:1.5rem">🌾</span> KrishiConnect
+    </div>
+    <div class="nav-links flex gap-6">
+      <a href="#features">Features</a>
+      <a href="#jobs">Find Jobs</a>
+      <a href="#postJob">Post Job</a>
+      <a href="#register">Register</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+  <div id="mobile-menu">
+    <a href="#features" onclick="toggleMenu()">Features</a>
+    <a href="#jobs" onclick="toggleMenu()">Find Jobs</a>
+    <a href="#postJob" onclick="toggleMenu()">Post Job</a>
+    <a href="#register" onclick="toggleMenu()">Register</a>
+    <a href="#about" onclick="toggleMenu()">About</a>
+    <a href="#contact" onclick="toggleMenu()">Contact</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <video autoplay muted loop playsinline>
+    <source src="Farm_banner.mp4" type="video/mp4">
+  </video>
+  <div class="hero-content max-w-7xl mx-auto px-6 py-20 w-full">
+    <div class="hero-badge">India's Agri Freelancing Platform</div>
+    <h1 class="hero-title">
+      Connect Farmers<br>with <span>Skilled Workers</span>
+    </h1>
+    <p class="hero-sub">
+      KrishiConnect links Indian farmers with agricultural workers, equipment operators, and agri-freelancers — making rural employment simple, fast, and fair.
+    </p>
+    <div class="flex flex-wrap gap-4">
+      <a href="#register" class="btn-primary">Get Started Free</a>
+      <a href="#jobs" class="btn-secondary">Browse Jobs</a>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-bar">
+  <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 divide-x divide-green-700">
+    <div class="stat-item"><div class="stat-num">10K+</div><div class="stat-label">Farmers Registered</div></div>
+    <div class="stat-item"><div class="stat-num">25K+</div><div class="stat-label">Workers Available</div></div>
+    <div class="stat-item"><div class="stat-num">18</div><div class="stat-label">States Covered</div></div>
+    <div class="stat-item"><div class="stat-num">₹2Cr+</div><div class="stat-label">Jobs Posted Value</div></div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<section id="features" class="py-20 bg-cream">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center mb-14 reveal">
+      <div class="section-label">What We Offer</div>
+      <h2 class="section-title mx-auto">Everything farmers need,<br>in one place</h2>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div class="feature-card reveal">
+        <img src="https://images.unsplash.com/photo-1621605812480-bb89ffb58d47?w=600&q=80" alt="Farm Workers">
+        <div class="p-6">
+          <div class="feature-icon">👨‍🌾</div>
+          <h4 class="text-lg font-bold text-leaf-dark mb-2">Hire Farm Workers</h4>
+          <p class="text-gray-600 text-sm leading-relaxed">Post a job and get matched with reliable, verified agricultural laborers for sowing, harvesting, spraying, and more.</p>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <img src="https://images.unsplash.com/photo-1584448089583-66cfa60bfc4b?w=600&q=80" alt="Farm Equipment">
+        <div class="p-6">
+          <div class="feature-icon">🚜</div>
+          <h4 class="text-lg font-bold text-leaf-dark mb-2">Rent Equipment</h4>
+          <p class="text-gray-600 text-sm leading-relaxed">Browse tractors, harvesters, and irrigation tools available on rent nearby — no middlemen, transparent pricing.</p>
+        </div>
+      </div>
+      <div class="feature-card reveal">
+        <img src="https://images.unsplash.com/photo-1596495577886-d920f1fb7238?w=600&q=80" alt="Freelance Jobs">
+        <div class="p-6">
+          <div class="feature-icon">💼</div>
+          <h4 class="text-lg font-bold text-leaf-dark mb-2">Agri Freelancing</h4>
+          <p class="text-gray-600 text-sm leading-relaxed">Post or apply for consulting, soil testing, drone operations, agri-training, and other skilled agricultural services.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Extra features row -->
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mt-10 reveal">
+      <div class="bg-white rounded-xl p-5 text-center shadow-sm">
+        <div class="text-2xl mb-2">📍</div>
+        <div class="font-semibold text-sm text-leaf-dark">GPS Job Matching</div>
+        <div class="text-xs text-gray-500 mt-1">Find workers near your farm</div>
+      </div>
+      <div class="bg-white rounded-xl p-5 text-center shadow-sm">
+        <div class="text-2xl mb-2">💸</div>
+        <div class="font-semibold text-sm text-leaf-dark">UPI / Wallet Pay</div>
+        <div class="text-xs text-gray-500 mt-1">Secure, instant payments</div>
+      </div>
+      <div class="bg-white rounded-xl p-5 text-center shadow-sm">
+        <div class="text-2xl mb-2">⭐</div>
+        <div class="font-semibold text-sm text-leaf-dark">Worker Ratings</div>
+        <div class="text-xs text-gray-500 mt-1">Hire with confidence</div>
+      </div>
+      <div class="bg-white rounded-xl p-5 text-center shadow-sm">
+        <div class="text-2xl mb-2">🗣</div>
+        <div class="font-semibold text-sm text-leaf-dark">Multilingual</div>
+        <div class="text-xs text-gray-500 mt-1">Hindi, English & regional</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEARCH JOBS -->
+<section id="jobs" class="py-20" style="background:#e8f4f0;">
+  <div class="max-w-4xl mx-auto px-6">
+    <div class="text-center mb-10 reveal">
+      <div class="section-label">Job Board</div>
+      <h2 class="section-title">Find agricultural work near you</h2>
+      <p class="section-sub mx-auto text-center">Search thousands of real farming jobs posted by verified farmers across India.</p>
+    </div>
+    <div class="form-card reveal">
+      <div class="flex gap-3 mb-6">
+        <input id="searchInput" type="text" placeholder="Search by job title or location…" class="form-input flex-1" onkeydown="if(event.key==='Enter') searchJobs()"/>
+        <button onclick="searchJobs()" class="btn-primary" style="white-space:nowrap">Search Jobs</button>
+      </div>
+      <div id="searchResults">
+        <div class="text-center py-8 text-gray-400">
+          <div style="font-size:2.5rem">🔍</div>
+          <div class="mt-2 font-medium">Enter a keyword above to search jobs</div>
+          <div class="text-sm mt-1">Try "harvest", "paddy", or your district name</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POST A JOB -->
+<section id="postJob" class="py-20 bg-cream">
+  <div class="max-w-2xl mx-auto px-6">
+    <div class="text-center mb-10 reveal">
+      <div class="section-label">For Farmers</div>
+      <h2 class="section-title">Post a job in 60 seconds</h2>
+      <p class="section-sub mx-auto text-center">Describe what you need and get matched with available workers right away.</p>
+    </div>
+    <div class="form-card reveal">
+      <div class="space-y-5">
+        <div>
+          <label class="form-label">Job Title</label>
+          <input id="jobTitle" type="text" placeholder="e.g. Need 3 workers for paddy harvest" class="form-input"/>
+        </div>
+        <div>
+          <label class="form-label">Location / District</label>
+          <input id="jobLocation" type="text" placeholder="e.g. Varanasi, Uttar Pradesh" class="form-input"/>
+        </div>
+        <div>
+          <label class="form-label">Job Description</label>
+          <textarea id="jobDescription" rows="4" placeholder="Describe the work, duration, pay, and any other details…" class="form-input" style="resize:vertical"></textarea>
+        </div>
+        <button onclick="postJob()" class="btn-primary w-full" style="text-align:center">Post Job →</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REGISTER / LOGIN -->
+<section id="register" class="py-20" style="background:#e8f4f0;">
+  <div class="max-w-md mx-auto px-6">
+    <div class="text-center mb-8 reveal">
+      <div class="section-label">Join KrishiConnect</div>
+      <h2 class="section-title">Create your free account</h2>
+    </div>
+    <div class="form-card reveal">
+      <!-- Tabs -->
+      <div class="flex gap-2 mb-6 bg-gray-100 rounded-10 p-1" style="border-radius:10px">
+        <button class="auth-tab active flex-1" id="tab-signup" onclick="switchTab('signup')">Sign Up</button>
+        <button class="auth-tab flex-1" id="tab-login" onclick="switchTab('login')">Log In</button>
+      </div>
+      <div class="space-y-4">
+        <div>
+          <label class="form-label">Email address</label>
+          <input type="email" id="email" placeholder="you@example.com" class="form-input"/>
+        </div>
+        <div>
+          <label class="form-label">Password</label>
+          <input type="password" id="password" placeholder="Min. 6 characters" class="form-input"/>
+        </div>
+        <button id="authBtn" onclick="handleAuth()" class="btn-primary w-full" style="text-align:center">Create Account</button>
+        <p id="authMessage" class="text-sm text-center font-medium" style="min-height:20px"></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="py-20 bg-cream">
+  <div class="max-w-3xl mx-auto px-6 text-center reveal">
+    <div class="section-label">Our Story</div>
+    <h2 class="section-title">Built for Bharat's farmers</h2>
+    <img
+      src="adarsh.jpeg"
+      alt="Adarsh Jaiswal – Founder of KrishiConnect"
+      class="about-img mx-auto mt-8 mb-6"
+      onerror="this.style.display='none'"
     />
-
-    <p class="text-lg text-gray-700 leading-relaxed">
-      <strong>KrishiConnect</strong> is a platform founded by <strong>Adarsh Jaiswal</strong> with the mission to empower Indian farmers by connecting them with skilled farm workers, agricultural freelancers, and equipment providers.
-      <br><br>
-      Our aim is to create a smarter, digitally-enabled agricultural ecosystem that promotes rural employment, efficiency, and sustainability. Through KrishiConnect, we are building bridges between talent and opportunity — simplifying the way farming services are exchanged across India.
-      <br><br>
-      Whether you're a farmer looking for help or a skilled worker searching for agricultural jobs, KrishiConnect is here to support and grow with you.
+    <p class="text-gray-600 leading-relaxed text-base">
+      <strong class="text-leaf-dark">KrishiConnect</strong> was founded by <strong class="text-leaf-dark">Adarsh Jaiswal</strong> with a single mission: make it effortless for Indian farmers to find the right help at the right time.
+    </p>
+    <p class="text-gray-600 leading-relaxed text-base mt-4">
+      From the fields of Uttar Pradesh to farms across 18 states, KrishiConnect is building a smarter, digitally-enabled agricultural ecosystem — one that promotes rural employment, reduces idle labour, and creates real opportunity for millions of rural Indians.
+    </p>
+    <p class="text-gray-600 leading-relaxed text-base mt-4">
+      Whether you're a farmer looking for harvest help or a skilled worker searching for the next job — KrishiConnect is your platform.
     </p>
   </div>
-</section>  <section id="contact" class="py-16 bg-gray-100">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <h3 class="text-2xl font-bold mb-4">Contact Us</h3>
-      <p class="text-gray-600 mb-4">Have questions or feedback? Reach out to us at <a href="mailto:support@krishiconnect.in" class="text-green-600">support@krishiconnect.in</a></p>
+</section>
+
+<!-- CONTACT -->
+<section id="contact" class="py-16" style="background:#2d6a2d;">
+  <div class="max-w-2xl mx-auto px-6 text-center reveal">
+    <h2 class="text-2xl font-bold text-white mb-3" style="font-family:'Poppins',sans-serif">Have questions?</h2>
+    <p class="text-green-200 mb-6">We'd love to hear from you — reach out anytime.</p>
+    <a href="mailto:support@krishiconnect.in" class="btn-primary">support@krishiconnect.in</a>
+    <p class="text-green-300 text-sm mt-6">We typically reply within 24 hours on working days.</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer py-8 px-6">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+    <div class="nav-logo" style="color:#b8d8b8">
+      <span style="font-size:1.3rem">🌾</span> KrishiConnect
     </div>
-  </section>  <footer class="text-center py-6 text-sm text-gray-500">
-    <img src="https://images.unsplash.com/photo-1560787313-5dff3307e257" alt="Footer" class="w-full max-h-64 object-cover rounded mb-4">
-    Â© 2025 KrishiConnect. All rights reserved.
-  </footer>
-</body>
-</html>
+    <div class="flex gap-6 text-sm">
+      <a href="#features">Features</a>
+      <a href="#jobs">Jobs</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <div class="text-sm" style="color:#668866">© 2025 KrishiConnect. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div id="toast">
+  <div class="toast-inner" id="toastInner">✅ Done!</div>
+</div>
+
+<!-- FIREBASE + APP LOGIC -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+  import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCFDmliUGnrcGy7Ow6aOrpsUORcr5gsA6A",
+    authDomain: "krishiconnect-4dff6.firebaseapp.com",
+    projectId: "krishiconnect-4dff6",
+    storageBucket: "krishiconnect-4dff6.appspot.com",
+    messagingSenderId: "388114250683",
+    appId: "1:388114250683:web:489b7705982317a0ae629e",
+    measurementId: "G-QFEEZNQEF7"
+  };
+
+  const app = initializ
